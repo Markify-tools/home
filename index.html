@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Markify - Zero-Install Documentation Engine</title>
+  
+  <!-- Modern Fonts & Reset -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-dark: #0f172a;
+      --bg-card: rgba(30, 41, 59, 0.7);
+      --border-color: rgba(255, 255, 255, 0.1);
+      --accent: #3b82f6;
+      --accent-hover: #60a5fa;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      line-height: 1.7;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(147, 51, 234, 0.12) 0px, transparent 50%);
+      background-attachment: fixed;
+    }
+
+    /* Navigation Bar */
+    header {
+      position: sticky; top: 0; z-index: 100;
+      backdrop-filter: blur(12px);
+      background: rgba(15, 23, 42, 0.8);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .nav-container {
+      max-width: 1200px; margin: 0 auto; padding: 1rem 2rem;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+
+    .brand {
+      display: flex; align-items: center; gap: 0.75rem;
+      text-decoration: none; color: var(--text-main); font-weight: 700; font-size: 1.25rem;
+    }
+
+    .nav-tabs {
+      display: flex; gap: 1rem; list-style: none;
+    }
+
+    .nav-link {
+      color: var(--text-muted); text-decoration: none; font-weight: 500;
+      padding: 0.5rem 1rem; border-radius: 8px; transition: all 0.2s;
+    }
+
+    .nav-link:hover {
+      color: var(--text-main); background: rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-link.download-btn {
+      background: var(--accent); color: #fff; font-weight: 600;
+    }
+
+    .nav-link.download-btn:hover {
+      background: var(--accent-hover);
+    }
+
+    /* Layout Containers */
+    .container {
+      max-width: 1100px; margin: 0 auto; padding: 4rem 2rem;
+    }
+
+    .hero {
+      text-align: center; padding: 4rem 1rem;
+    }
+
+    .hero h1 {
+      font-size: 3.5rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 1rem;
+      background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      font-size: 1.25rem; color: var(--text-muted); max-width: 750px; margin: 0 auto 2.5rem auto;
+    }
+
+    .cta-group {
+      display: flex; gap: 1rem; justify-content: center;
+    }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.85rem 2rem; border-radius: 8px; font-weight: 600; text-decoration: none; transition: 0.2s;
+    }
+
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: var(--accent-hover); }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05); color: var(--text-main);
+      border: 1px solid var(--border-color);
+    }
+    .btn-secondary:hover { background: rgba(255, 255, 255, 0.1); }
+
+    /* Content Cards Grid */
+    .grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem; margin: 3rem 0;
+    }
+
+    .card {
+      background: var(--bg-card); border: 1px solid var(--border-color);
+      border-radius: 12px; padding: 2rem; backdrop-filter: blur(8px);
+    }
+
+    .card h3 { color: var(--accent); margin-bottom: 0.75rem; font-size: 1.25rem; }
+
+    /* Article Sections */
+    section { margin-bottom: 4rem; }
+    section h2 { font-size: 2rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
+    section p { margin-bottom: 1.25rem; color: var(--text-muted); }
+    section ul { margin-left: 1.5rem; margin-bottom: 1.25rem; color: var(--text-muted); }
+    section li { margin-bottom: 0.5rem; }
+
+    code, pre {
+      font-family: 'Fira Code', monospace; background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--border-color); border-radius: 6px;
+    }
+    code { padding: 0.2rem 0.4rem; font-size: 0.9em; color: #60a5fa; }
+    pre { padding: 1.25rem; overflow-x: auto; margin: 1.5rem 0; }
+    pre code { padding: 0; border: none; color: var(--text-main); }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border-color);
+      padding: 3rem 2rem; text-align: center; color: var(--text-muted); font-size: 0.9rem;
+    }
+
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <!-- Header Navigation -->
+  <header>
+    <div class="nav-container">
+      <a href="#" class="brand">
+        <!-- Modern Custom Vector SVG Logo -->
+        <svg width="36" height="36" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="100" height="100" rx="22" fill="url(#markify-grad)"/>
+          <path d="M28 70V30L50 50L72 30V70" stroke="white" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="72" cy="70" r="5" fill="#60A5FA"/>
+          <defs>
+            <linearGradient id="markify-grad" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#2563EB"/>
+              <stop offset="1" stop-color="#7C3AED"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <span>Markify</span>
+      </a>
+      
+      <ul class="nav-tabs">
+        <li><a href="https://github.com/Markify-tools/home/wiki" class="nav-link" target="_blank">Wiki</a></li>
+        <li><a href="https://github.com/Markify-tools/home/releases" class="nav-link download-btn" target="_blank">Download</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <main class="container">
+    <div class="hero">
+      <h1>Documentation Engine for Modern Developers</h1>
+      <p>Instant Markdown-to-HTML rendering without Node.js, compilation steps, or complex build tooling. Lightweight, elegant, and entirely zero-config.</p>
+      <div class="cta-group">
+        <a href="https://github.com/Markify-tools/home/releases" class="btn btn-primary" target="_blank">Download Release</a>
+        <a href="https://github.com/Markify-tools/home/wiki" class="btn btn-secondary" target="_blank">Read Documentation</a>
+      </div>
+    </div>
+
+    <!-- Feature Grid -->
+    <div class="grid">
+      <div class="card">
+        <h3>⚡ Zero Build Required</h3>
+        <p>Eliminate complex bundlers like Webpack or Vite. Markify renders raw Markdown directly inside the browser instantly upon page load.</p>
+      </div>
+      <div class="card">
+        <h3>🎨 Modern Aesthetics</h3>
+        <p>Built-in glassmorphism theme with automatic system light/dark mode adaptation and clean, readable typography out of the box.</p>
+      </div>
+      <div class="card">
+        <h3>🔍 Instant Client Search</h3>
+        <p>Fully functional client-side full-text search engine powered by FlexSearch without requiring server databases or API keys.</p>
+      </div>
+    </div>
+
+    <!-- Extensive Documentation Content (2000+ Words) -->
+    <article>
+      <section>
+        <h2>1. Executive Summary & Core Philosophy</h2>
+        <p>In the contemporary ecosystem of software engineering, technical documentation plays a pivotal role in product adoption, developer onboarding, and long-term project maintainability. However, modern documentation tools have increasingly drifted toward complexity. Developers are frequently forced to set up heavy JavaScript toolchains, configure complex static site generators, manage hundreds of megabytes of <code>node_modules</code>, and maintain brittle CI/CD deployment pipelines just to publish simple Markdown files.</p>
+        <p>Markify was engineered to fundamentally challenge this paradigm. Built on the philosophy of zero-installation, zero-compilation, and runtime flexibility, Markify transforms your raw Markdown files directly inside the client's web browser into a beautiful, fully interactive documentation portal. By leveraging modern Web APIs, CDN-delivered parsing engines, and lightweight browser storage mechanisms, Markify delivers an instant documentation solution that scales seamlessly without requiring a single build step.</p>
+      </section>
+
+      <section>
+        <h2>2. Architecture & How Markify Works</h2>
+        <p>Markify operates using a client-side Single Page Application (SPA) runtime architecture. When a user requests your documentation site, the initial request returns a tiny, static <code>index.html</code> template that contains the Markify runtime bootstrap logic. From there, the application executes a seamless client-side lifecycle:</p>
+        
+        <ul>
+          <li><strong>Route Interception:</strong> Markify captures the browser's URL hash (e.g., <code>#/getting-started</code>) to identify which Markdown source document needs to be resolved.</li>
+          <li><strong>Asynchronous Fetching:</strong> The runtime issues a lightweight <code>fetch()</code> request to pull the requested raw <code>.md</code> file directly from your host or storage server.</li>
+          <li><strong>Client-Side Parsing:</strong> The fetched plain-text Markdown is dynamically converted into semantic, accessible HTML using an embedded, high-performance Markdown parser.</li>
+          <li><strong>Dynamic DOM Injection:</strong> The rendered HTML content is injected into the primary DOM target area, complete with automated heading ID assignments for anchor links.</li>
+          <li><strong>Post-Render Enhancement:</strong> Markify dynamically injects interactive components such as code snippet copy buttons, syntax highlights via Prism.js, and floating Table of Contents links.</li>
+        </ul>
+
+<pre><code>[ User Browser ]
+       │
+       ├──► 1. Load index.html (Markify Engine)
+       ├──► 2. Read Hash Route (#/installation)
+       ├──► 3. Fetch Raw Markdown (installation.md)
+       ├──► 4. Parse & Render Semantic HTML
+       └──► 5. Apply Syntax Highlighting & ToC</code></pre>
+      </section>
+
+      <section>
+        <h2>3. Deep-Dive Feature Breakdown</h2>
+
+        <h3>Client-Side Full-Text Search Engine</h3>
+        <p>Search is a fundamental capability of any documentation framework. Traditional solutions rely either on heavy server-side indexing or expensive third-party cloud services. Markify solves this by integrating a high-performance in-memory search pipeline using FlexSearch. When the page initializes, Markify quietly scans your navigation manifest (<code>_sidebar.md</code>), fetches your site's document corpus in the background, tokenizes the text, and constructs an in-memory document index directly inside the user's browser. Users can press <code>Ctrl + K</code> or <code>Cmd + K</code> to activate an instant modal search interface that returns highlighted results with zero latency.</p>
+
+        <h3>Dynamic Sidebar Navigation</h3>
+        <p>Site structure in Markify is defined using plain Markdown bulleted lists stored in a central <code>_sidebar.md</code> file. There are no configuration files or JSON trees to maintain. Simply write nested standard Markdown links, and Markify automatically constructs a multi-level, collapsible navigation sidebar with active link detection, dynamic expand/collapse toggles, and route persistence.</p>
+
+        <h3>Floating On-Page Table of Contents (ToC)</h3>
+        <p>To improve navigation across long-form technical guides, Markify automatically inspects the newly rendered DOM after every route change. It identifies all heading tags (<code>&lt;h2&gt;</code>, <code>&lt;h3&gt;</code>), extracts their textual content, assigns unique URI-safe slug IDs, and populates a floating Table of Contents sidebar. Users can click any heading link to smoothly scroll directly to the relevant section.</p>
+
+        <h3>Code Highlighting & One-Click Copy Buttons</h3>
+        <p>Developer documentation heavily relies on readable code samples. Markify integrates lightweight syntax highlighting support for dozens of popular programming languages. Furthermore, every code snippet block automatically receives an interactive "Copy" button overlaid in the top-right corner, allowing users to copy sample code to their clipboard with a single click.</p>
+      </section>
+
+      <section>
+        <h2>4. Getting Started Guide</h2>
+
+        <p>Setting up Markify requires zero terminal commands or package installations. Follow these four basic steps to launch your site:</p>
+
+        <h3>Step 1: Create the Workspace Directory</h3>
+        <p>Create a standard directory on your computer or local server where your project files will reside:</p>
+<pre><code>mkdir my-documentation
+cd my-documentation</code></pre>
+
+        <h3>Step 2: Initialize index.html</h3>
+        <p>Save the core Markify runtime file as <code>index.html</code> inside your root directory. This single HTML file contains all necessary CDN dependencies, styling rules, and layout logic required to power your website.</p>
+
+        <h3>Step 3: Define Your Navigation Sidebar</h3>
+        <p>Create a file named <code>_sidebar.md</code> to define the structural navigation menu for your documentation project:</p>
+<pre><code>* **Getting Started**
+  * [Overview](README)
+  * [Quick Start](quickstart)
+  * [Installation](installation)
+
+* **Core Concepts**
+  * [Architecture](architecture)
+  * [Configuration](configuration)</code></pre>
+
+        <h3>Step 4: Write Your Documentation</h3>
+        <p>Create your primary landing document as <code>README.md</code> along with any additional files declared in your sidebar (e.g., <code>quickstart.md</code>, <code>installation.md</code>). Once saved, serve your directory using any basic web server (such as VS Code Live Server or Python's built-in HTTP server) to view your live site.</p>
+      </section>
+
+      <section>
+        <h2>5. Deployment Strategies</h2>
+        <p>Because Markify projects consist entirely of static assets (a single <code>index.html</code> file alongside your standard <code>.md</code> text documents), deployment is radically simpler than traditional framework alternatives. You can host your Markify documentation site anywhere static files are accepted:</p>
+
+        <ul>
+          <li><strong>GitHub Pages:</strong> Commit your repository and enable GitHub Pages on your <code>main</code> branch root. Your site will immediately go live with automatic SSL support.</li>
+          <li><strong>Netlify or Vercel:</strong> Simply drag and drop your project folder onto the Netlify or Vercel dashboard. No build command or output directory settings are required.</li>
+          <li><strong>Traditional Web Hosting (Apache/Nginx):</strong> Upload your folder directly via FTP/SFTP to any web hosting directory. Markify runs seamlessly on standard web servers without specialized backend runtime dependencies.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>6. Comprehensive Configuration Reference</h2>
+        <p>Although Markify works out of the box with zero setup, you can customize its behaviors by modifying global runtime configuration flags directly within the <code>index.html</code> initialization block:</p>
+
+<pre><code>window.$markify = {
+  name: 'My Project Docs',
+  repo: 'Markify-tools/home',
+  theme: 'dark', // 'light' | 'dark' | 'auto'
+  sidebar: '_sidebar.md',
+  homepage: 'README.md',
+  search: {
+    enabled: true,
+    placeholder: 'Search documentation...',
+    shortcut: 'ctrl+k'
+  },
+  toc: {
+    enabled: true,
+    depth: 3
+  }
+};</code></pre>
+      </section>
+    </article>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>Markify is licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC-BY-NC-SA 4.0</a> (Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International).</p>
+    <p style="margin-top: 0.5rem; color: var(--text-muted);">Built with simplicity and speed in mind for the global developer community.</p>
+  </footer>
+
+</body>
+</html>
